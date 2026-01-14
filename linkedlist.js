@@ -106,6 +106,44 @@ function createLinkedList() {
     return resultString;
   }
 
+  function insertAt(index, ...values) {
+    if (index < 0 || index > size()) {
+      throw RangeError(`Specified index ${index} is out of bounds`);
+    }
+
+    const valuesRev = values.toReversed();
+    if (index === 0) {
+      valuesRev.forEach((value) => {
+        prepend(value);
+      });
+    } else {
+      const beforeNode = at(index - 1);
+      let { nextNode } = beforeNode;
+      valuesRev.forEach((value) => {
+        let currentNode = createNode(value, nextNode);
+        nextNode = currentNode;
+      });
+      beforeNode.nextNode = nextNode;
+    }
+  }
+
+  function removeAt(index) {
+    if (index < 0 || index > size() - 1) {
+      throw RangeError(`Specified index ${index} is out of bounds`);
+    }
+
+    if (index === 0) {
+      pop();
+    } else {
+      const beforeNode = at(index - 1);
+      const removedNode = beforeNode.nextNode;
+      const afterNode = removedNode.nextNode;
+
+      removedNode.nextNode = null;
+      beforeNode.nextNode = afterNode;
+    }
+  }
+
   return {
     append,
     prepend,
@@ -116,6 +154,8 @@ function createLinkedList() {
     pop,
     contains,
     findIndex,
+    insertAt,
+    removeAt,
     toString,
   };
 }
@@ -150,3 +190,17 @@ list.append(null);
 // console.log(popped);
 // console.log(list.toString());
 // console.log(list.size());
+
+const list2 = createLinkedList();
+list2.append(1);
+list2.append(4);
+list2.append(5);
+// console.log(list2.toString());
+// list2.insertAt(1, 2, 3);
+// console.log(list2.toString());
+// list2.insertAt(0, -2, -1);
+// console.log(list2.toString());
+// list2.insertAt(3, 6, 7);
+// console.log(list2.toString());
+// list2.removeAt(1);
+// console.log(list2.toString());
