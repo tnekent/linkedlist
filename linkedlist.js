@@ -2,7 +2,7 @@ function createNode(value, nextNode) {
   return { value, nextNode };
 }
 
-function createLinkedList() {
+export function createLinkedList() {
   let _head = null;
 
   function append(value) {
